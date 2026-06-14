@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Articles Hub | Sinead Deokiesingh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --purple:#7C3AED; --purple-light:#A78BFA; --gold:#F59E0B; --gold-light:#FCD34D;
+      --dark:#0A0A14; --dark-2:#12122A; --text:#E2E2F0; --text-muted:#9090B0;
+      --cyan:#06B6D4; --white:#FFFFFF; --card-bg:rgba(30,30,58,.82); --radius:16px;
+      --transition:.4s cubic-bezier(.4,0,.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;font-size:16px}
+    body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--text);line-height:1.7;overflow-x:hidden}
+    #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--gold),var(--cyan));width:0%;z-index:9999;transition:width .1s}
+    nav{position:fixed;top:3px;left:0;right:0;z-index:999;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:background var(--transition),backdrop-filter var(--transition)}
+    nav.scrolled{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(124,58,237,.2)}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;background:linear-gradient(135deg,var(--purple-light),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .nav-links{display:flex;gap:1.4rem;list-style:none;align-items:center;flex-wrap:wrap}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:.82rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;transition:color var(--transition)}
+    .nav-links a:hover{color:var(--white)}
+    .nav-back{background:linear-gradient(135deg,var(--purple),#5B21B6);color:var(--white)!important;padding:.5rem 1.1rem;border-radius:50px}
+    .nav-back:hover{transform:translateY(-2px)}
+    section{padding:6rem 2rem;position:relative}
+    .container{max-width:1180px;margin:0 auto}
+    .hero{min-height:58vh;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(124,58,237,.25) 0%,transparent 70%)}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,4.3rem);font-weight:900;line-height:1.05;margin-bottom:1rem;background:linear-gradient(135deg,var(--white) 0%,var(--purple-light) 50%,var(--gold-light) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero p{font-size:1.05rem;color:var(--text-muted);max-width:760px;margin:0 auto 2rem}
+    .pill-row{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
+    .pill{background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);color:var(--purple-light);padding:.35rem .85rem;border-radius:50px;font-size:.8rem;font-weight:600}
+    .section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.3),transparent)}
+    .chapter-label{display:inline-flex;align-items:center;gap:.75rem;font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--purple-light);margin-bottom:1rem}
+    .chapter-label::before{content:'';width:40px;height:1px;background:var(--purple-light)}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.1rem);font-weight:900;line-height:1.15;margin-bottom:1rem}
+    .section-title .highlight{background:linear-gradient(135deg,var(--purple-light),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .section-subtitle{font-size:1.03rem;color:var(--text-muted);max-width:720px;line-height:1.8;margin-bottom:2.5rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
+    .card{background:var(--card-bg);border:1px solid rgba(124,58,237,.15);border-radius:var(--radius);padding:1.5rem;backdrop-filter:blur(12px);transition:all var(--transition);position:relative;overflow:hidden}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform var(--transition)}
+    .card:hover{transform:translateY(-6px);border-color:rgba(124,58,237,.4);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+    .card:hover::before{transform:scaleX(1)}
+    .card h3{font-size:1.1rem;font-weight:800;color:var(--white);margin-bottom:.5rem}
+    .card p{font-size:.92rem;color:var(--text-muted);line-height:1.75}
+    .meta{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+    .meta span{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-radius:999px;padding:.25rem .6rem;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);color:var(--cyan)}
+    .link{display:inline-flex;margin-top:1rem;color:var(--gold-light);font-size:.85rem;font-weight:800;text-decoration:none}
+    .link:hover{text-decoration:underline}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:2rem 0 0}
+    .stat{background:rgba(30,30,58,.55);border:1px solid rgba(124,58,237,.16);border-radius:14px;padding:1.1rem;text-align:center}
+    .stat strong{display:block;font-family:'Playfair Display',serif;font-size:2rem;color:var(--white)}
+    .stat small{color:var(--text-muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
+    .infographic{display:grid;grid-template-columns:1.1fr .9fr;gap:1.5rem;align-items:stretch}
+    .lane{display:grid;gap:1rem}
+    .lane .card{min-height:120px}
+    .lane-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--purple-light);font-weight:800;margin-bottom:.5rem}
+    .note{background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(124,58,237,.12));border:1px solid rgba(245,158,11,.2);border-radius:16px;padding:1.5rem}
+    .note h3{font-size:1rem;color:var(--white);margin-bottom:.5rem}
+    .note p{color:var(--text-muted);font-size:.92rem;line-height:1.7}
+    footer{background:var(--dark);border-top:1px solid rgba(124,58,237,.1);padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
+    footer a{color:var(--purple-light);text-decoration:none}
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    @media (max-width: 768px){
+      nav{padding:1rem}
+      section{padding:4rem 1.25rem}
+      .infographic{grid-template-columns:1fr}
+      .nav-links{gap:1rem}
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+  <nav id="navbar">
+    <div class="nav-logo">📰 Articles</div>
+    <ul class="nav-links">
+      <li><a href="#featured">Featured</a></li>
+      <li><a href="#infographic">Infographic</a></li>
+      <li><a href="#coming-soon">Coming Soon</a></li>
+      <li><a href="https://fortheloveoflearning.github.io/mindmaps-gallery/" target="_blank">Mindmaps</a></li>
+      <li><a href="https://fortheloveoflearning.github.io/video-collaborations/" target="_blank">Videos</a></li>
+      <li><a href="https://fortheloveoflearning.github.io/aboutme/" class="nav-back">← Back to About Me</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="container reveal">
+      <h1>Articles Hub</h1>
+      <p>A consolidated home for my writing, thought leadership, and infographics. This page is data-driven, so adding another article to the library updates the showcase automatically.</p>
+      <div class="pill-row">
+        <span class="pill">Thought leadership</span>
+        <span class="pill">Learning & Development</span>
+        <span class="pill">Tech writing</span>
+        <span class="pill">Coming soon</span>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <section id="featured">
+    <div class="container">
+      <div class="reveal">
+        <div class="chapter-label">Featured Articles</div>
+        <h2 class="section-title">Published <span class="highlight">Writing</span></h2>
+        <p class="section-subtitle">Two published pieces to start the archive, plus space for future posts, contributions, and article series.</p>
+      </div>
+      <div class="grid" id="article-grid"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <section id="infographic">
+    <div class="container">
+      <div class="reveal">
+        <div class="chapter-label">Infographic</div>
+        <h2 class="section-title">Article <span class="highlight">Map</span></h2>
+        <p class="section-subtitle">A simple visual system to consolidate articles by theme and status. Add a new article to the data list and the map updates with no layout changes needed.</p>
+      </div>
+      <div class="infographic">
+        <div class="lane reveal">
+          <div class="lane-title">Published now</div>
+          <div class="card"><h3>Microsoft 365 Blog</h3><p>Get Certified: The must-have Data Engineer credential.</p></div>
+          <div class="card"><h3>Medium</h3><p>Above target in PMI-CAPM exam — how did I do it?</p></div>
+        </div>
+        <div class="note reveal">
+          <h3>Infographic-ready summary</h3>
+          <p>This hub can act like a visual article dashboard: publisher, topic, status, and a short takeaway. New articles can be added to the article array to keep the gallery current without redesigning the page.</p>
+          <div class="stats" style="margin-top:1rem" id="topic-stats"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <section id="coming-soon">
+    <div class="container">
+      <div class="reveal">
+        <div class="chapter-label">Coming Soon</div>
+        <h2 class="section-title">More from <span class="highlight">Me</span></h2>
+        <p class="section-subtitle">A reserved area for new articles, series, and cross-posts as I keep publishing.</p>
+      </div>
+      <div class="grid" id="coming-grid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Consolidated articles by <a href="https://fortheloveoflearning.github.io/aboutme/">Sinead Kristin Deokiesingh</a> · <a href="https://github.com/ForTheLoveOfLearning/articles-gallery">View on GitHub</a></p>
+  </footer>
+
+  <script>
+    const articles = [
+      {
+        title: 'Get Certified: The must-have Data Engineer credential',
+        publisher: 'Microsoft 365 Blog',
+        url: 'https://techcommunity.microsoft.com/blog/microsoft_365blog/get-certified-the-must-have-data-engineer-credential/4384389',
+        topic: 'Microsoft Certifications',
+        status: 'Published',
+        summary: 'A certification-focused article centered on the Data Engineer credential and why it matters for modern data careers.'
+      },
+      {
+        title: 'Above target in PMI-CAPM exam — how did I do it?',
+        publisher: 'Medium',
+        url: 'https://medium.com/@thefemalepm/above-target-in-pmi-capm-exam-how-did-i-do-it-2baa0b97216d',
+        topic: 'Project Management',
+        status: 'Published',
+        summary: 'A practical reflection on passing the CAPM exam above target and the study methods that made the difference.'
+      },
+      {
+        title: 'Future article slot',
+        publisher: 'Coming Soon',
+        url: '#',
+        topic: 'Learning & Development',
+        status: 'Draft',
+        summary: 'Reserved for your next article, blog post, or thought-leadership piece.'
+      }
+    ];
+
+    const comingSoon = [
+      'Mindset for technical training',
+      'Speaking and stagecraft',
+      'Learning design in the AI era'
+    ];
+
+    const grid = document.getElementById('article-grid');
+    const comingGrid = document.getElementById('coming-grid');
+    const stats = document.getElementById('stats');
+    const topicStats = document.getElementById('topic-stats');
+    const publishedCount = articles.filter(a => a.status === 'Published').length;
+    const draftCount = articles.filter(a => a.status !== 'Published').length;
+    const topics = [...new Set(articles.map(a => a.topic))];
+
+    stats.innerHTML = [
+      [`${publishedCount}`, 'Published'],
+      [`${topics.length}`, 'Themes'],
+      [`${draftCount}`, 'Coming soon']
+    ].map(([n, l]) => `<div class="stat"><strong>${n}</strong><small>${l}</small></div>`).join('');
+
+    topicStats.innerHTML = topics.map(t => `<div class="stat"><strong>${t.split(' ')[0]}</strong><small>${t}</small></div>`).join('');
+
+    grid.innerHTML = articles.map((a, i) => `
+      <article class="card reveal" style="animation-delay:${i * .08}s">
+        <h3>${a.title}</h3>
+        <p>${a.summary}</p>
+        <div class="meta"><span>${a.publisher}</span><span>${a.topic}</span><span>${a.status}</span></div>
+        ${a.url === '#' ? '<span class="link" style="opacity:.6;cursor:default">Coming soon</span>' : `<a class="link" href="${a.url}" target="_blank">Read article →</a>`}
+      </article>
+    `).join('');
+
+    comingGrid.innerHTML = comingSoon.map((item, i) => `
+      <article class="card reveal" style="animation-delay:${i * .08}s">
+        <h3>${item}</h3>
+        <p>A future article placeholder that can be replaced with a published link whenever you add the next piece.</p>
+        <div class="meta"><span>Coming soon</span><span>Placeholder</span></div>
+      </article>
+    `).join('');
+
+    const bar = document.getElementById('progress-bar');
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      bar.style.width = pct + '%';
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('visible'));
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
